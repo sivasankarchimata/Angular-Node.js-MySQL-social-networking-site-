@@ -1,0 +1,312 @@
+<p>
+  posts works!
+</p>
+
+<div class="container" style="width: 100%; height: 100%;  ">
+  <div class="row" style=" margin: 1px; background-color: #fff; border: 2px solid #ada5a5; border-radius: 4px; ">
+    <!-- ngFor for posts -->
+    <div class="container" *ngFor="let post of posts; let i = index">
+      <!-- {{post.user_id}}, {{post.post_id}}, {{post.saved_name}}, {{ post.file_path}} -->
+      <div class="
+      row" style="border: 1px solid #e6e6e6;">
+        <div class="col-md-12 col-md-offset-0" style=" height: auto; ">
+          <h6> {{post.description}} </h6>
+        </div>
+      </div>
+      <!---H--
+      <div class="" style="display: block; margin-top: 10px;  border-radius: 2px;">
+        <img src="http://localhost:3000/uploads/{{post.saved_name}}" style="  width: 100%; height: 400px;">
+      </div>-->
+
+      <!--ngFor for files  k let i = index--->
+      <div class="container">
+        <div class="row" *ngFor="let file of files">
+          <div *ngIf="post.post_id==file.post_id">
+            <div class="" style="display: block; border: 1px solid #ada5a5; border-radius: 4px; ">
+              <img src="http://localhost:3000/uploads/{{file.saved_name}}" style=" margin-top: 2px; width:100%;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--ngFor for likes -->
+      <div class="container" style="display: block; margin-top: 2px; border: 1px solid #ada5a5; ">
+        <div class="row">
+          <!--like button-->
+          <div class="col-md-3">
+            <div *ngFor="let like of postLikes; let j = index ">
+              <!-- {{post.post_id==like.post_id}} {{post.post_id}} {{like.post_id}} {{like.like_status}}  (like.like_status === null) || (like.like_status === 'undefined')  -->
+              <!-- <span><i class="fa fa-squar fa-stack-1x">10</i></span> -->
+
+
+              <div
+                *ngIf="( (post.user_id == like.user_id) && (post.post_id == like.post_id) && (like.like_status == 'like'))">
+                <button type="button" class="btn btn-success" (click)=likeSubmit(post.user_id,post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>{{like.user_id}},{{like.post_id}}
+                {{post.post_id}} {{like.like_id}}
+              </div>
+              <div
+                *ngIf="( (postLikes !== 0) && (post.user_id == like.user_id) && (post.post_id == like.post_id) && (like.like_status == 'unlike'))">
+                <button type="button" class="btn btn-warning" (click)=likeSubmit(post.user_id,post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>{{like.user_id}},{{like.post_id}}
+                {{post.post_id}} {{like.like_id}}
+              </div>
+
+              <div
+                *ngIf="( (postLikes === 0) && (post.user_id !== like.user_id) && (post.post_id !== like.post_id) && (like.like_status !== 'unlike'))">
+                <button type="button" class="btn btn-warning" (click)=likeSubmit(post.user_id,post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>{{like.user_id}},{{like.post_id}}
+                {{post.post_id}} {{like.like_id}}
+              </div>
+
+
+
+              <!-- <div *ngFor="let item of  getPostsWithLikes(); let i = index ">
+              <div *ngIf="item.like && item.like.like_status=='like'">
+                <button type="button" class="btn btn-success" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>{{item.like.post_id}}
+              </div>
+
+              <div *ngIf="item.like && item.like.like_status=='unlike'">
+                <button type="button" class="btn btn-warning" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+              </div>
+
+              <div *ngIf="!item.like">
+                <button type="button" class="btn btn-basic" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+              </div>
+            </div> -->
+
+
+            </div>
+          </div>
+
+
+
+
+
+
+
+          <!-- dilike button-->
+          <div class=" col-md-3">
+            <div class="row" *ngFor="let like of likes">
+
+              <div *ngIf="((post.user_id==like.user_id) && (post.post_id==like.post_id) && (like.like_status=='like'))">
+                <button type="button" class="btn btn-default" (click)=likeSubmit(post.user_id,post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+              </div>
+              <div
+                *ngIf="((post.user_id==like.user_id) && (post.post_id==like.post_id) && (like.like_status=='unlike'))">
+                <button type="button" class="btn btn-success" (click)=likeSubmit(post.user_id,post.post_id)><i
+                    class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+              </div>
+
+            </div>
+          </div>
+          <!--Comment Button-->
+          <div class="col-md-3">
+            <button class="btn btn-light "><i class="fa fa-comments" aria-hidden="true"
+                style="font-size:20px;color:red"></i></button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-light "><i class="fa fa-share-alt" aria-hidden="true"
+                style="font-size:20px;color:red"></i></button>
+          </div>
+
+        </div>
+      </div>
+
+      <!--ng for comments -->
+      <div class="row">
+        <div class="col-md-12" style="display: block; ">
+
+          <form [formGroup]="commentForm" method="post" enctype="multipart/form-data" (ngSubmit)="comment_Submit(post.user_id, post.post_id,
+            commentForm)">
+            <div class="form-group">
+              <input type="text" class="form-control" name="comment{{i}}" formControlName="comment" id="comment"
+                placeholder="Enter comments" cols="40" rows="5" spellcheck="true"
+                style="width:100%; height: auto; border: 1px solid #ada5a5; border-radius: 4px; outline: none; user-select: text; white-space: pre-wrap; overflow-wrap: break-word; "
+                [ngClass]="{'form-control': true,
+              'is-invalid': !f.comment.valid,
+              'is-valid':f.comment.valid}">
+              <!-- <span *ngIf="f.comment.errors?.required && f.comment.touched" class="text-danger">Field is required</span> -->
+              <div *ngIf="f.comment.errors?.minlength && (f.comment.dirty || f.comment.touched)"
+                class="alert alert-danger">
+                Comment
+                should be at
+                least 2 characters.</div>
+            </div>
+            <!--<textarea name="Text1" cols="40" rows="5"></textarea> (ngSubmit)="onSubmit(uploadForm)
+              <textarea name="comment" form="usrform">Enter text here...</textarea>
+              <textarea rows=3 class="form-control form-input" type="text" formControlName="question"></textarea>-->
+            <button type="submit" class="btn-sm btn-success" [disabled]="!commentForm.valid">Comment</button>
+
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" style="display: block; ">
+          <div *ngFor="let comment of comments">
+            <div *ngIf="((post.user_id==comment.user_id) && (post.post_id==comment.post_id))">
+              <h5> {{comment.comment_text}} </h5>
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!--post div ends -->
+
+  </div>
+</div>
+
+
+<!-- 
+<div class="container" *ngFor="let item of getPostsWithLikes(); let i = index ">
+  <h6> {{item.post.description}} </h6>
+  <div class="row">
+    <div class="col-md-3">
+      <div *ngIf="item.like && item.like.like_status=='like'">
+        <button type="button" class="btn btn-success" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+            class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+      </div>
+
+      <div *ngIf="item.like && item.like.like_status=='unlike'">
+        <button type="button" class="btn btn-warning" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+            class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+      </div>
+
+      <div *ngIf="!item.like">
+        <button type="button" class="btn btn-basic" (click)=likeSubmit(item.post.user_id,item.post.post_id)><i
+            class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+<app-alerts> </app-alerts>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<ng-container *ngIf="foo === 1;else second"></ng-container>
+<ng-template #second>
+    <ng-container *ngIf="foo === 2;else third"></ng-container>
+</ng-template>
+<ng-template #third></ng-template> -->
+
+
+
+<!--
+<div>
+  <img src="http://localhost:3000/uploads/1546155317060_04.jpg" style="  width: 100%; height: 400px;">
+</div>
+<div class="">
+  <img src="file:///C:/Users/sivas/Documents/my-app/server/uploads/1546155317060_04.jpg" style="  width: 100%; height: 200px;">
+</div>
+<div class="">
+  <img src="http://localhost:4200/src/assets/1.jpg " style="  width: 100%; height: 200px;">
+</div>
+
+-->
+
+
+
+<!-- <div
+              *ngIf="((post.user_id==likes[i].user_id) && (post.post_id==likes[i].post_id) && (likes[i].like_status=='like'))">
+              <button type="button" class="btn btn-success" (click)=likeSubmit(post.user_id,post.post_id)><i
+                  class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+            </div>
+            <div
+              *ngIf="((post.user_id==likes[i].user_id) && (post.post_id==likes[i].post_id) && (likes[i].like_status=='unlike'))">
+              <button type="button" class="btn btn-warning" (click)=likeSubmit(post.user_id,post.post_id)><i
+                  class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+            </div>
+
+            <div *ngIf="(post.user_id!=likes[i].user_id) && (post.post_id!=likes[i].post_id)">
+              <button type="button" class="btn btn-basic" (click)=likeSubmit(post.user_id,post.post_id)><i
+                  class="fa fa-thumbs-up" aria-hidden="true"></i></button>{{post.user_id}},{{post.post_id}}
+              {{likes[i].user_id}}
+            </div> -->
+
+
+
+<!-- <div [ngSwitch]="j">
+
+  <div *ngSwitchDefault>
+    <button type="button" class="btn btn-basic" (click)=likeSubmit(post.user_id,post.post_id)><i class="fa fa-thumbs-up"
+        aria-hidden="true"></i></button>
+  </div>
+  <div *ngSwitchCase="((post.post_id==like.post_id) && (post.user_id==like.user_id) && (like.like_status=='like'))">
+    <button type="button" class="btn btn-success" (click)=likeSubmit(post.user_id,post.post_id)><i class="fa fa-thumbs-up"
+        aria-hidden="true"></i></button>
+  </div>
+  <div *ngSwitchCase="((post.post_id==like.post_id) && (post.user_id==like.user_id) && (like.like_status=='unlike'))">
+    <button type="button" class="btn btn-warning" (click)=likeSubmit(post.user_id,post.post_id)><i class="fa fa-thumbs-up"
+        aria-hidden="true"></i></button>
+  </div>
+
+</div> -->
+
+<!-- <ng-template #second> -->
+<!-- <div
+    *ngIf="((post.user_id==like.user_id) && (post.post_id==like.post_id) && (like.like_status=='like'));else second;">
+    <button type="button" class="btn btn-success" (click)=likeSubmit(post.user_id,post.post_id)><i
+        class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+  </div>
+  <--</ng-template> --
+  <ng-template #second>
+    <button type="button" class="btn btn-basic" (click)=likeSubmit(post.user_id,post.post_id)><i
+        class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+  </ng-template> -->

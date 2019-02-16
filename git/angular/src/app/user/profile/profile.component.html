@@ -1,0 +1,126 @@
+<app-layout> </app-layout>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!--left-->
+        <div class="col-3" style=" border-width:5px; padding:2px; border-color: black;">
+            <h2>Profile </h2>
+            <div class="container">
+                <div class="" *ngFor="let user of users">
+                    <h1> {{ user.user_id }} </h1>
+                    <h1> Name: {{ user.username }} </h1>
+                    <h1> Password: {{ user.password }} </h1>
+                    <button type="button" class="btn btn-danger" (click)="logOut()">Logout</button>
+                </div>
+            </div>
+        </div>
+        <!--Time Line-->
+        <div class="col-6" style=" margin-top: 5px; border: 10px; border-color: blue; background-color:#fff; ">
+            <!-- Form starts -->
+            <div class="row card">
+                <div class="col-sm-12">
+                    <h4>Upload Section</h4>
+                    <form method="post" enctype="multipart/form-data" action="/upload">
+                        <input type="text" name="user_id" id="user_id" value="{{user_id}}">
+                        <div id="fileSelector">
+                            <input type="file" name="fileUplaod" id="fileUpload" multiple ng2FileSelect [uploader]="uploader">
+                        </div>
+                        <div>
+                            <div class="row uploadList" *ngFor="let item of uploader.queue">
+                                <div class="col-sm-4">{{item.file.name}}</div>
+                                <div class="col-sm-4">
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" [ngStyle]="{'width':item.progress+'%'}"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-dark" (click)="item.upload()">Upload</button>
+                                    <button type="button" class="btn btn-danger" (click)="item.remove()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="uploader?.queue?.length > 0">
+                            <button type="button" class="btn btn-primary" (click)="uploader.uploadAll()">Upload
+                                All</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row card">
+                <h4>Download Section</h4>
+                <div class="row" *ngFor="let item of attachmentList; let i = index" style="margin:10px;padding:5px;background-color:rgb(231, 229, 229); border-radius:5px; line-height:40px;">
+                    <div><img src=""></div>
+                    <div class="col-sm-7">{{item.originalname}}</div>
+                    <div class="col-sm-5" style="text-align:center;"><button type="button" class="btn btn-primary"
+                            (click)="download(i)">Download</button></div>
+                </div>
+            </div>
+            <!--posts div -->
+            <app-posts> </app-posts>
+            <!--post div -->
+        </div>
+
+        <!--Right file upload post -->
+        <div class="col-3" style="background-color:aqua ; ">
+            <div class="row card">
+                <div class="col-sm-12">
+                    <h4>Upload Section</h4>
+                    <form [formGroup]="uploadForm" method="post" enctype="multipart/form-data" (ngSubmit)="onSubmit(uploadForm)">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" formControlName="user_id" id="user_id" name="user_id"
+                                value="{{user_id}}" />{{user_id}}
+                        </div>
+                        <div class="form-group">
+                            <label for="description">description </label>
+                            <input type="text" class="form-control" name="description" formControlName="description" id="description"
+                                placeholder="description" [ngClass]="{'form-control': true,
+                    'is-invalid': !f.description.valid && f.description.touched,
+                    'is-valid': f.description.valid}">
+                            <small *ngIf="f.description.errors?.required && f.description.touched" class="text-danger">Field
+                                is required</small>
+                            <small *ngIf="f.description.errors?.minlength && f.description.touched" class="text-danger">Name
+                                should be at least 4 characters.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="filePost">file</label>
+                            <input type="file" class="form-control" multiple name="files" formControlName="filePost" id="filePost"
+                                (change)="filePostEvent($event)">
+                        </div>
+                        <button type="submit" class="btn btn-primary" [disabled]="!uploadForm.valid">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<app-alerts> </app-alerts>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+ <form method="post" enctype="multipart/form-data" action="/upload">
+  <label for="file">Upload a file</label>
+  <input type="file" name="upload">
+  <input type="submit" class="button">
+</form>
+-->
